@@ -1,0 +1,23 @@
+CHIP PC {
+    IN in[16],load,inc,reset;
+    OUT out[16];
+
+    PARTS:
+    // Almacenando flags anteriores
+
+    Bit(in=inc, load=true, out=inc1);
+    Bit(in=load, load=true, out=load1);
+    Bit(in=reset, load=true, out=reset1);
+
+    //Almacenando entradas y salidas
+    Register(in=in, load=true, out=in1);
+    Register(in=out0, load=true, out=out1);
+
+    //Realizando las condiciones de los comentarios ^^
+    Mux16(a=elsif1, b=false, sel=reset1, out=out, out=out0);
+    Mux16(a=elsif2, b=in1, sel=load1, out=elsif1);
+    Mux16(a=out1, b=add, sel=inc1, out=elsif2);
+
+    Inc16(in=out1, out=add);
+
+}

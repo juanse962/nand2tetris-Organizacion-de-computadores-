@@ -1,0 +1,128 @@
+class BouncingBallSimple
+{
+	//Atributos de la pelota
+   	field int BOX_WIDTH;
+   	field int BOX_HEIGHT;
+	field float ballRadius; 
+   	field float ballX; 
+   	field float ballY; 
+   	field float ballSpeedX;
+   	field float ballSpeedY; 
+
+
+   	constructor BouncingBallSimple new()
+	   {
+
+		//Inicializacion
+	   	let ballRadius = 90; 
+	   	let ballX = ballRadius + 50; 
+	   	let ballY = ballRadius + 20; 
+	   	let ballSpeedX = 7;
+	   	let ballSpeedY = 4;
+	   	let BOX_WIDTH = 511;
+	   	let BOX_HEIGHT = 255;
+	   	do run();	
+	   	return this;
+
+   	}
+
+	//Dibujar la pelota	
+   	method void Draw()
+	   {
+
+   		do Screen.clearScreen();
+   		do Screen.setColor(true);
+   		do Screen.drawCircle(ballX,ballY,ballRadius);
+   		do graph();
+
+   		return;
+   	}
+
+	//Imprimiendo en pantalla
+   	method void graph()
+	   {
+   	    var string ball;
+        var string comma;
+        var string rigthParenthesis;
+        var string speed;
+
+        let ball = "Ball @(";
+        let comma = ",";
+        let rigthParenthesis = ")";
+        let speed = "Speed=(";
+
+        do Output.moveCursor(0,0);
+        do Output.printString(ball);
+        do Output.printInt((ballX + ballRadius));
+        do Output.printString(comma);
+        do Output.moveCursor(0,11);        
+        do Output.printInt((ballY + ballRadius));
+        do Output.printString(rigthParenthesis);
+        do Output.moveCursor(0,16);  
+        do Output.printString(speed);
+        do Output.printInt(ballSpeedX);
+        do Output.printString(comma);
+        do Output.moveCursor(0,26);
+        do Output.printInt(ballSpeedY);
+        do Output.printString(rigthParenthesis);
+        do String.dispose(ball);
+        do String.dispose(comma);
+        do String.dispose(rigthParenthesis);
+        do String.dispose(speed);
+
+        return;
+   	}
+
+	//Desplazamiento de la pelota
+   	method void run()
+	   {
+
+   		while(true){
+   		
+		   	let ballX = ballX + ballSpeedX;
+            let ballY = ballY + ballSpeedY;
+
+            if ((ballX - ballRadius) < 0) 
+			{
+               	let ballSpeedX = -ballSpeedX; 
+               	let ballX = ballRadius; 
+            } 
+            else 
+			{
+
+            	if ((ballX + ballRadius) > BOX_WIDTH) {
+           
+		       		let ballSpeedX = -ballSpeedX;
+               		let ballX = BOX_WIDTH - ballRadius;
+           
+		    	}
+            }
+            if ((ballY - ballRadius) < 0) 
+			{
+
+               	let ballSpeedY = -ballSpeedY;
+               	let ballY = ballRadius;
+
+            } else 
+			{
+            	if ((ballY + ballRadius) > BOX_HEIGHT) 
+				{
+             		let ballSpeedY = -ballSpeedY;
+                	let ballY = BOX_HEIGHT - ballRadius;
+                }
+            }
+       
+	        do Draw();
+            do Sys.wait(2000/30);
+               
+   		}
+   		return;
+   	}
+
+	//Realiza un cleanup a la memoria
+   	method void dispose()
+	   {
+	   	do Memory.deAlloc(this);
+	   	return;
+   	}
+}
